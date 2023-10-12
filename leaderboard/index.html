@@ -1,77 +1,21 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Model Performance</title>
-    <style>
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      th,
-      td {
-        border: 1px solid black;
-        padding: 5px;
-        text-align: center;
-      }
-      th {
-        max-width: 30px;
-        white-space: normal;
-        word-wrap: break-word;
-      }
-    </style>
-  </head>
-  <body>
-    <table id="performanceTable">
-      <thead>
-        <tr id="headerRow"></tr>
-      </thead>
-      <tbody id="dataRows"></tbody>
-    </table>
+<html lang="en">
 
-    <script type="text/javascript">
-      fetch("lm_eval.json")
-        .then((response) => response.json())
-        .then((src) => {
-          var headerRow = document.getElementById("headerRow");
-          var dataRows = document.getElementById("dataRows");
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RWKV</title>
+  <style>
+    html,
+    body {
+      overflow: hidden;
+    }
+  </style>
+</head>
 
-          var benchmarks = Array.from(
-            new Set([].concat(...Object.values(src).map(Object.keys)))
-          );
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
 
-          headerRow.innerHTML =
-            "<th>Model</th>" +
-            benchmarks.map((benchmark) => `<th>${benchmark}</th>`).join("");
-
-          function toString(benchmark, score) {
-            if (benchmark.includes("ppl")) return score.toFixed(2);
-            else return (src[model][benchmark] * 100).toFixed(1) + "%";
-          }
-
-          var sortedModels = Object.entries(src).sort((a, b) =>
-            a[0].localeCompare(b[0])
-          );
-
-          for (var i = 0; i < sortedModels.length; i++) {
-            var model = sortedModels[i][0];
-            var data = sortedModels[i][1];
-
-            var row = document.createElement("tr");
-            row.innerHTML =
-              `<td>${model}</td>` +
-              benchmarks
-                .map(
-                  (benchmark) =>
-                    `<td>${
-                      data[benchmark]
-                        ? toString(benchmark, data[benchmark])
-                        : "-"
-                    }</td>`
-                )
-                .join("");
-            dataRows.appendChild(row);
-          }
-        });
-    </script>
-  </body>
 </html>
