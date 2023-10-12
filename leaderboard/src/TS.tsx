@@ -1,8 +1,7 @@
 import { useMemo } from "react";
 import { MantineReactTable, type MRT_ColumnDef } from "mantine-react-table";
-import { data, type Person } from "./makeData";
-import { Container, Divider, Title } from "@mantine/core";
-import LargeModelEvalData from "./lm_eval.json";
+import { Title } from "@mantine/core";
+import LargeModelEvalData from "../lm_eval.json";
 import { langMap, modelInfo, tableMap } from "./constant";
 import { calcRenderNumer } from "./utils";
 
