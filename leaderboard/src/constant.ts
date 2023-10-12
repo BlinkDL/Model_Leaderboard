@@ -256,4 +256,3 @@ export const modelInfo: {
   open_llama_3b_v2: 3.4,
   long_llama_3b: 3.4,
 };
-

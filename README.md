@@ -14,4 +14,5 @@ pnpm dev
 ## build
 ```
 pnpm build
+move dist/* files to rwkv.com repo /leaderboard folder
 ```
