@@ -43,148 +43,175 @@ export const langMap: {
   "it/ppl": "Italian",
 };
 
+export const avgPercentMap = [
+  "lambada_openai/",
+  "piqa/",
+  "storycloze_2016/",
+  "hellaswag/",
+  "winogrande/",
+  "arc_challenge/",
+  "arc_easy/",
+  "headqa_en/",
+  "openbookqa/",
+  "sciq/",
+  "record/",
+  "copa/",
+];
+
 export const tableMap: {
   value: string;
   label: string;
   sub: string[];
 }[] = [
-  {
-    value: "model",
-    sub: ['Size', 'Name'],
-    label: "Language Model Leaderboard"
-  },
-  // { value: "modelSize", label: "Sizes" },
-  // { value: "modelName", label: "Model" },
-  {
-    value: "lambada_openai/",
-    sub: ["ppl", "acc"],
-    label: "LAMBADA",
-  },
-  {
-    value: "piqa/",
-    sub: ["acc", "acc_norm"],
-    label: "PIQA",
-  },
-  { value: "storycloze_2016/", label: "StoryCloze16", sub: ["acc"] },
-  {
-    value: "hellaswag/",
-    sub: ["acc", "acc_norm"],
-    label: "Hellaswag",
-  },
-  { value: "winogrande/", label: "WinoGrande", sub: ["acc"] },
-  {
-    value: "arc_challenge/",
-    sub: ["acc", "acc_norm"],
-    label: "ARC_challenge",
-  },
-  {
-    value: "arc_easy/",
-    sub: ["acc", "acc_norm"],
-    label: "ARC_easy",
-  },
-  {
-    value: "headqa_en/",
-    sub: ["acc", "acc_norm"],
-    label: "HeadQA_en",
-  },
-  {
-    value: "openbookqa/",
-    sub: ["acc", "acc_norm"],
-    label: "OpenbookQA",
-  },
-  {
-    value: "sciq/",
-    sub: ["acc", "acc_norm"],
-    label: "SciQ",
-  },
-  {
-    value: "record/",
-    sub: ["f1", "em"],
-    label: "ReCoRD",
-  },
-  { value: "copa/", label: "COPA", sub: ["acc"] },
-  {
-    value: "lambada_openai_mt_",
-    sub: [
-      "de/ppl",
-      "de/acc",
-      "es/ppl",
-      "es/acc",
-      "fr/ppl",
-      "fr/acc",
-      "it/ppl",
-      "it/acc",
-      "%avg",
-    ],
-    label: "xLBD",
-  },
-  {
-    value: "xstory_cloze_",
-    sub: [
-      "ar/acc",
-      "en/acc",
-      "es/acc",
-      "eu/acc",
-      "hi/acc",
-      "id/acc",
-      "my/acc",
-      "ru/acc",
-      "sw/acc",
-      "te/acc",
-      "zh/acc",
-      "%avg",
-    ],
-    label: "xSC",
-  },
-  {
-    value: "xwinograd_",
-    sub: ["en/acc", "fr/acc", "jp/acc", "pt/acc", "ru/acc", "zh/acc", "%avg"],
-    label: "xWG",
-  },
-  {
-    value: "xcopa_",
-    sub: [
-      "et/acc",
-      "ht/acc",
-      "id/acc",
-      "it/acc",
-      "qu/acc",
-      "sw/acc",
-      "ta/acc",
-      "th/acc",
-      "tr/acc",
-      "vi/acc",
-      "zh/acc",
-      "%avg",
-    ],
-    label: "xCOPA",
-  },
-  {
-    value: "truthfulqa_mc/",
-    sub: ["mc1", "mc2"],
-    label: "truthfulqa",
-  },
-  {
-    value: "race/",
-    sub: ["acc"],
-    label: "race",
-  },
-  {
-    value: "pubmedqa/",
-    sub: ["acc"],
-    label: "pubmedqa",
-  },
-  {
-    value: "mc_taco/",
-    sub: ["em", "f1"],
-    label: "mc_taco",
-  },
-  {
-    value: "logiqa/",
-    sub: ["acc", "acc_norm"],
-    label: "logiqa",
-  },
-];
+    {
+      value: "model",
+      sub: ['Size', 'Name'],
+      label: "Language Model Leaderboard"
+    },
+    // { value: "modelSize", label: "Sizes" },
+    // { value: "modelName", label: "Model" },
+    {
+      value: "lambada_openai/",
+      sub: ["ppl", "acc"],
+      label: "LAMBADA",
+    },
+    {
+      value: "avg%",
+      sub: ["%"],
+      label: "avg%",
+    },
+    {
+      value: "piqa/",
+      sub: ["acc", "acc_norm"],
+      label: "PIQA",
+    },
+    { value: "storycloze_2016/", label: "StoryCloze16", sub: ["acc"] },
+    {
+      value: "hellaswag/",
+      sub: ["acc", "acc_norm"],
+      label: "Hellaswag",
+    },
+    { value: "winogrande/", label: "WinoGrande", sub: ["acc"] },
+    {
+      value: "arc_challenge/",
+      sub: ["acc", "acc_norm"],
+      label: "ARC_challenge",
+    },
+    {
+      value: "arc_easy/",
+      sub: ["acc", "acc_norm"],
+      label: "ARC_easy",
+    },
+    {
+      value: "headqa_en/",
+      sub: ["acc", "acc_norm"],
+      label: "HeadQA_en",
+    },
+    {
+      value: "openbookqa/",
+      sub: ["acc", "acc_norm"],
+      label: "OpenbookQA",
+    },
+    {
+      value: "sciq/",
+      sub: ["acc", "acc_norm"],
+      label: "SciQ",
+    },
+    {
+      value: "record/",
+      sub: ["f1", "em"],
+      label: "ReCoRD",
+    },
+    { value: "copa/", label: "COPA", sub: ["acc"] },
+    {
+      value: "%xavg",
+      sub: [
+        "%",
+      ],
+      label: "xavg%",
+    },
+    {
+      value: "lambada_openai_mt_",
+      sub: [
+        // "de/ppl",
+        "de/acc",
+        // "es/ppl",
+        "es/acc",
+        // "fr/ppl",
+        "fr/acc",
+        // "it/ppl",
+        "it/acc",
+        "%avg",
+      ],
+      label: "xLBD",
+    },
+    {
+      value: "xstory_cloze_",
+      sub: [
+        "ar/acc",
+        "en/acc",
+        "es/acc",
+        "eu/acc",
+        "hi/acc",
+        "id/acc",
+        "my/acc",
+        "ru/acc",
+        "sw/acc",
+        "te/acc",
+        "zh/acc",
+        "%avg",
+      ],
+      label: "xSC",
+    },
+    {
+      value: "xwinograd_",
+      sub: ["en/acc", "fr/acc", "jp/acc", "pt/acc", "ru/acc", "zh/acc", "%avg"],
+      label: "xWG",
+    },
+    {
+      value: "xcopa_",
+      sub: [
+        "et/acc",
+        "ht/acc",
+        "id/acc",
+        "it/acc",
+        "qu/acc",
+        "sw/acc",
+        "ta/acc",
+        "th/acc",
+        "tr/acc",
+        "vi/acc",
+        "zh/acc",
+        "%avg",
+      ],
+      label: "xCOPA",
+    },
+    {
+      value: "truthfulqa_mc/",
+      sub: ["mc1", "mc2"],
+      label: "truthfulqa",
+    },
+    {
+      value: "race/",
+      sub: ["acc"],
+      label: "race",
+    },
+    {
+      value: "pubmedqa/",
+      sub: ["acc"],
+      label: "pubmedqa",
+    },
+    {
+      value: "mc_taco/",
+      sub: ["em", "f1"],
+      label: "mc_taco",
+    },
+    {
+      value: "logiqa/",
+      sub: ["acc", "acc_norm"],
+      label: "logiqa",
+    },
+  ];
 
 export type EvalValue = {
   modelName: string;

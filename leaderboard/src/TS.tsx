@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { MantineReactTable, type MRT_ColumnDef } from "mantine-react-table";
-import { Title } from "@mantine/core";
+import { Box, Title } from "@mantine/core";
 import LargeModelEvalData from "../lm_eval.json";
-import { langMap, modelInfo, tableMap } from "./constant";
+import { avgPercentMap, langMap, modelInfo, tableMap } from "./constant";
 import { calcRenderNumer } from "./utils";
 
 const evalData = Object.keys(LargeModelEvalData).map((item: string) => {
@@ -22,6 +22,18 @@ const evalData = Object.keys(LargeModelEvalData).map((item: string) => {
   // xcopa_*
   let xcopaAacAvg = 0;
   let xcopaAacCount = 0;
+  /*
+    LAMBADA	PIQA
+    StoryCloze16
+    Hellaswag	WinoGrande
+    arc_challenge	arc_easy
+    headQA_en	openbookQA
+    sciq	ReCoRD	COPA
+
+    acc & aac_norm average
+  */
+  let avg = 0;
+  let avgCount = 0;
   keys.forEach((item) => {
     if (item.includes("xstory_cloze_")) {
       xscAacAvg += values[item];
@@ -47,16 +59,30 @@ const evalData = Object.keys(LargeModelEvalData).map((item: string) => {
       xcopaAacAvg += values[item];
       xcopaAacCount += 1;
     }
-  });
 
+    avgPercentMap.forEach((avgItem) => {
+      if (
+        item.startsWith(avgItem) &&
+        (item.includes("acc") || item.includes("f1") || item.includes("em"))
+      ) {
+        avg += values[item];
+        avgCount += 1;
+      }
+    });
+  });
+  const xavg =
+    (xscAacAvg + xlbAacAvg + xwgAacAvg + xcopaAacAvg) /
+    (xscItemCount + xlbAacCount + xwgAacCount + xcopaAacCount);
   return {
     modelName: item,
-    modelSize: modelInfo[item] || '-',
+    modelSize: modelInfo[item] || "-",
     ...values,
     "xstory_cloze_%avg": xscAacAvg / xscItemCount,
     "lambada_openai_mt_%avg": xlbAacAvg / xlbAacCount,
     "xwinograd_%avg": xwgAacAvg / xwgAacCount,
     "xcopa_%avg": xcopaAacAvg / xcopaAacCount,
+    "%xavg%": xavg,
+    "avg%%": avg / avgCount,
   };
 });
 
@@ -78,34 +104,41 @@ tableMap.forEach((item) => {
 });
 
 const renderColumns = tableMap.map((item) => {
-  if (item.value === 'model') {
+  if (item.value === "model") {
     return {
       id: item.value,
       header: item.label,
       // size: 100,
       columns: item.sub.map((subItem) => {
         const accessKey = item.value + subItem;
-        if (subItem === 'Size') {
+        if (subItem === "Size") {
           return {
             accessorKey: accessKey,
             header: subItem,
             size: 50,
             enableColumnActions: false,
-          }
+          };
         }
         return {
           accessorKey: accessKey,
-          size: 50,
+          size: 100,
           header: subItem,
           enableColumnActions: false,
           Cell: (cellItem: any) => {
             const { cell } = cellItem;
             const value = cell.getValue();
-            return <div style={{
-              maxWidth: '10rem',
-            }}>{value}</div>
-          }
-        }
+            return (
+              <Box
+                style={{
+                  maxWidth: "10rem",
+                  wordBreak: "break-all",
+                }}
+              >
+                {value}
+              </Box>
+            );
+          },
+        };
       }),
     };
   }
@@ -118,22 +151,19 @@ const renderColumns = tableMap.map((item) => {
       return {
         accessorKey: accessKey,
         header: subItem,
-        size: 50,
+        size: 15,
         enableColumnActions: false,
         Cell: (cellItem: any) => {
           const { cell } = cellItem;
-          return calcRenderNumer(cell.getValue())
-        }
-      }
+          return calcRenderNumer(cell.getValue());
+        },
+      };
     }),
   };
-})
+});
 
 const LLMBoard = () => {
-  const columns = useMemo<MRT_ColumnDef<any>[]>(
-    () => renderColumns,
-    []
-  );
+  const columns = useMemo<MRT_ColumnDef<any>[]>(() => renderColumns, []);
 
   return (
     <MantineReactTable
@@ -143,11 +173,11 @@ const LLMBoard = () => {
       enableTableFooter={false}
       enableBottomToolbar={false}
       enableColumnOrdering
-      mantineTableProps= {{
+      mantineTableProps={{
         withColumnBorders: true,
       }}
       mantineTableContainerProps={{
-        sx: { maxHeight: `${window.innerHeight - 70}px` }
+        sx: { maxHeight: `${window.innerHeight - 70}px` },
       }}
       mantineSearchTextInputProps={{
         placeholder: "Search Table",
@@ -167,17 +197,50 @@ const LLMBoard = () => {
       }}
       enableStickyFooter={true}
       enableStickyHeader={true}
+      enableRowDragging={false}
+      enableColumnDragging={false}
+      mantineTableBodyCellProps={{
+        sx: {
+          whiteSpace: "break-spaces",
+        },
+      }}
+      mantineTableHeadCellProps={{
+        sx: {
+          "& .mantine-TableHeadCell-Content-Labels": {
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-between",
+          },
+          "& .mantine-TableHeadCell-Content-Wrapper": {
+            overflow: "unset",
+            textOverflow: "unset",
+            whiteSpace: "unset",
+            wordBreak: "break-all",
+            wordWrap: "break-word",
+          },
+        },
+      }}
+      mantineTableHeadProps={{
+        sx: {
+          minHeight: "200px",
+          position: "sticky",
+        },
+      }}
       initialState={{
         density: "xs",
-        columnPinning: { left: ['modelSize', 'modelName', 'model'], right: [] },
+        columnPinning: { left: ["modelSize", "modelName", "model"], right: [] },
+        rowPinning: { top: [], bottom: [] },
         pagination: {
           pageIndex: 0,
           pageSize: 1000,
         },
-        sorting: [{
-          id: 'lambada_openai/ppl',
-          desc: false,
-        }],
+        sorting: [
+          {
+            id: "lambada_openai/ppl",
+            desc: false,
+          },
+        ],
         showGlobalFilter: true,
       }}
     />
